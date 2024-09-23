@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import { defineQuery } from "next-sanity";
-import { client } from "@/sanity/client";
-
-const options = { next: { revalidate: 60 } };
+import { sanityFetch } from "@/sanity/client";
 
 const CUSTOMERS_QUERY = defineQuery(`*[ 
   _type == "customer" 
@@ -18,8 +16,11 @@ const CUSTOMERS_QUERY = defineQuery(`*[
 }|order(fullName asc)`);
 
 export default async function CustomersPage() {
-  const customers = await client.fetch(CUSTOMERS_QUERY, {}, options);
-  console.log({ customers });
+  const customers: any = await sanityFetch({
+    query: CUSTOMERS_QUERY, 
+    qParams: {},
+    tags: ['customers']
+  });
 
   return (
     <main className="flex bg-gray-100 min-h-screen flex-col p-24 gap-12">

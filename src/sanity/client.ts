@@ -1,9 +1,30 @@
-import { createClient } from "next-sanity";
+import api from "@/lib/sanity.api"
+import { ClientConfig, createClient, QueryParams } from "next-sanity";
 
-export const client = createClient({
-  projectId: "bwvf5737",
-  dataset: "production",
-  token: 'skg20bhKPoR15POYPzn85gsF53sJfqNhOHi5FwoP4w1nSiHNWM6f9qNCgh90qm6WFK3N7yIXO4WwM1kpmFGxY6ECHBkcrxCyjiCtHmPP5nMDQSrsXnsdqO3vRpIiVASR0Yaam8KunCSUISUl5ketyzEkBMLdyznxYFDICsFJhxNQaAiIH3wi',
-  apiVersion: "2024-01-01",
-  useCdn: false,
-});
+const { projectId, dataset, apiVersion, token } = api
+
+const config: ClientConfig = {
+  projectId,
+  dataset,
+  apiVersion,
+  // set CDN to live API in development mode
+  useCdn: process.env.NODE_ENV === "development" ? true : false,
+  token,
+};
+
+export const client = createClient(config);
+
+export async function sanityFetch<QueryResponse>({
+  query,
+  qParams = {},
+  tags,
+}: {
+  query: string;
+  qParams?: QueryParams;
+  tags: string[];
+}): Promise<QueryResponse> {
+  return client.fetch<QueryResponse>(query, qParams, {
+    cache: process.env.NODE_ENV === "development" ? "no-store" : "force-cache",
+    next: { tags },
+  });
+}

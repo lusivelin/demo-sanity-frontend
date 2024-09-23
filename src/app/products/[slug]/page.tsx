@@ -2,12 +2,10 @@ import { defineQuery, PortableText } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
 
 import { SanityImageSource } from "@sanity/image-url/lib/types/types";
-import { client } from "@/sanity/client";
+import { client, sanityFetch } from "@/sanity/client";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-
-const options = { next: { revalidate: 60 } };
 
 const PRODUCT_QUERY = defineQuery(`*[
     _type == "product" &&
@@ -36,7 +34,11 @@ export default async function productPage({
 }: {
   params: { slug: string };
 }) {
-  const product = await client.fetch(PRODUCT_QUERY, params, options);
+  const product: any = await sanityFetch({
+    query: PRODUCT_QUERY, 
+    qParams: params,
+    tags: ['product']
+  });
   if (!product) {
     notFound();
   }

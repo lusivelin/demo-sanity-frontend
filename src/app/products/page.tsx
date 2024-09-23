@@ -2,9 +2,7 @@
 
 import Link from "next/link";
 import { defineQuery } from "next-sanity";
-import { client } from "@/sanity/client";
-
-const options = { next: { revalidate: 60 } };
+import { sanityFetch } from "@/sanity/client";
 
 const PRODUCTS_QUERY = defineQuery(`*[
   _type == "product"
@@ -24,7 +22,11 @@ const PRODUCTS_QUERY = defineQuery(`*[
 }|order(date desc)`);
 
 export default async function IndexPage() {
-  const products = await client.fetch(PRODUCTS_QUERY, {}, options);
+  const products: any = await sanityFetch({
+    query: PRODUCTS_QUERY, 
+    qParams: {},
+    tags: ['product']
+  });
 
   return (
     <main className="flex bg-gray-100 min-h-screen flex-col p-24 gap-12">
