@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { defineQuery } from "next-sanity";
 
 export default async function IndexPage() {
   return (

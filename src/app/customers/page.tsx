@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import Link from "next/link";
 import { defineQuery } from "next-sanity";
 import { client } from "@/sanity/client";
