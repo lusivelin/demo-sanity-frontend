@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import { Button, Card, Stack, TextInput, Select, TextArea } from '@sanity/ui';
 import { client } from '@/sanity/client';
 import Link from 'next/link';
-import { revalidateTag } from "next/cache";
 
 const CustomerForm = () => {
   const [formData, setFormData] = useState({
@@ -58,6 +57,7 @@ const CustomerForm = () => {
         _type: 'customer',
         ...formData,
       });
+      console.log('Customer created:', createdCustomer);
       await fetch('/api/revalidate', {
         method: 'POST',
         headers: {

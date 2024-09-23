@@ -1,3 +1,5 @@
+/* eslint-disable  @typescript-eslint/no-explicit-any */
+
 import { defineQuery, PortableText } from "next-sanity";
 import imageUrlBuilder from "@sanity/image-url";
 
